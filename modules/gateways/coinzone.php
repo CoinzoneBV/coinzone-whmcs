@@ -4,7 +4,7 @@ function coinzone_config() {
         "FriendlyName" => array("Type" => "System", "Value"=>"Coinzone"),
         "clientCode" => array("FriendlyName" => "Client Code", "Type" => "text", "Size" => "20"),
         "apiKey" => array("FriendlyName" => "API Key", "Type" => "text", "Size" => "20"),
-        "transactionSpeed" => array("FriendlyName" => "Transaction Speed", "Type" => "dropdown", "Options" => "LOW,MEDIUM,HIGH"),
+        "transactionSpeed" => array("FriendlyName" => "Transaction Speed", "Type" => "dropdown", "Options" => "NONE,LOW,MEDIUM,HIGH"),
     );
     return $configarray;
 }

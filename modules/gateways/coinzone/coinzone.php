@@ -4,7 +4,7 @@ include '../../../includes/gatewayfunctions.php';
 
 $response = _coinzoneTransaction();
 if ($response->status->code !== 201) {
-    exit('Error');
+    die('Error. Cannot proceed to payment. Please try again');
 }
 
 header('Location:' . $response->response->url);
@@ -97,13 +97,16 @@ function _coinzoneTransaction() {
             'amount' => $amount,
             'currency' => $currency,
             'merchantReference' => $_POST['invoiceid'],
-            'speed' => $coinzoneConfig['transactionSpeed'],
             'email' => $_POST['email'],
             'description' => $_POST['description'],
             'notificationUrl' => $_POST['notificationUrl']
         )
     );
-    var_dump($payload);
+
+    if ($coinzoneConfig['transactionSpeed'] != 'NONE') {
+        $payload['speed'] = $coinzoneConfig['transactionSpeed'];
+    }
+
     $timestamp = time();
     $stringToSign = $payload . $url . $timestamp;
     $signature = hash_hmac('sha256', $stringToSign, $coinzoneConfig['apiKey']);
@@ -115,19 +118,16 @@ function _coinzoneTransaction() {
         'timestamp: ' . $timestamp,
         'signature: ' . $signature
     );
+
     $curlHandler = curl_init($url);
     curl_setopt($curlHandler, CURLOPT_RETURNTRANSFER, true);
     curl_setopt($curlHandler, CURLOPT_HTTPHEADER, $headers);
     curl_setopt($curlHandler, CURLOPT_SSL_VERIFYHOST, false);
     curl_setopt($curlHandler, CURLOPT_SSL_VERIFYPEER, false);
-
-    if (!empty($payload)) {
-        curl_setopt($curlHandler, CURLOPT_CUSTOMREQUEST, "POST");
-        curl_setopt($curlHandler, CURLOPT_POSTFIELDS, $payload);
-    }
+    curl_setopt($curlHandler, CURLOPT_CUSTOMREQUEST, "POST");
+    curl_setopt($curlHandler, CURLOPT_POSTFIELDS, $payload);
 
     $result = curl_exec($curlHandler);
-    var_dump($result);
     if ($result === false) {
         return false;
     }
