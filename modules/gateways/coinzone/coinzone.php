@@ -92,20 +92,19 @@ function _coinzoneTransaction() {
 
     $url = 'https://api.coinzone.local/v2/transaction';
 
-    $payload = json_encode(
-        array(
-            'amount' => $amount,
-            'currency' => $currency,
-            'merchantReference' => $_POST['invoiceid'],
-            'email' => $_POST['email'],
-            'description' => $_POST['description'],
-            'notificationUrl' => $_POST['notificationUrl']
-        )
+    $payload = array(
+        'amount' => $amount,
+        'currency' => $currency,
+        'merchantReference' => $_POST['invoiceid'],
+        'email' => $_POST['email'],
+        'description' => $_POST['description'],
+        'notificationUrl' => $_POST['notificationUrl']
     );
 
     if ($coinzoneConfig['transactionSpeed'] != 'NONE') {
         $payload['speed'] = $coinzoneConfig['transactionSpeed'];
     }
+    $payload = json_encode($payload);
 
     $timestamp = time();
     $stringToSign = $payload . $url . $timestamp;
