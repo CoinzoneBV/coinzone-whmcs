@@ -90,7 +90,7 @@ function _coinzoneTransaction() {
     }
 
 
-    $url = 'https://api.coinzone.local/v2/transaction';
+    $url = 'https://api.coinzone.com/v2/transaction';
 
     $payload = array(
         'amount' => $amount,
