@@ -108,7 +108,7 @@ function _coinzoneTransaction() {
 
     $timestamp = time();
     $stringToSign = $payload . $url . $timestamp;
-    $signature = hash_hmac('sha256', $stringToSign, $coinzoneConfig['apiKey']);
+    $signature = hash_hmac('sha256', $stringToSign, html_entity_decode($coinzoneConfig['apiKey']));
 
     $headers = array(
         'Content-Type: application/json',

@@ -1,10 +1,27 @@
 <?php
 function coinzone_config() {
     $configarray = array(
-        "FriendlyName" => array("Type" => "System", "Value"=>"Coinzone"),
-        "clientCode" => array("FriendlyName" => "Client Code", "Type" => "text", "Size" => "20"),
-        "apiKey" => array("FriendlyName" => "API Key", "Type" => "text", "Size" => "20"),
-        "transactionSpeed" => array("FriendlyName" => "Transaction Speed", "Type" => "dropdown", "Options" => "NONE,LOW,MEDIUM,HIGH"),
+        "coinzoneDescription" => array(
+            "Type" => "hidden",
+            "Description" => 'Add your Client Code and API Key below to configure Coinzone.' .
+                'This can be found on the API tab of the Settings page in the <a href="https://merchant.coinzone.com/settings">Coinzone Control Panel</a>.<br/>' .
+                'Have questions?  Please visit our <a href="http://support.coinzone.com/">Customer Support Site</a>.<br/>' .
+                'Don\'t have a Coinzone account? <a href="https://merchant.coinzone.com/signup">Sign up for free.</a>'
+        ),
+        "FriendlyName" => array(
+            "Type" => "System",
+            "Value"=>"Coinzone"
+        ),
+        "clientCode" => array(
+            "FriendlyName" => "Client Code",
+            "Type" => "text",
+            "Size" => "20"
+        ),
+        "apiKey" => array(
+            "FriendlyName" => "API Key",
+            "Type" => "text",
+            "Size" => "20"
+        )
     );
     return $configarray;
 }

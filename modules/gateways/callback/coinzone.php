@@ -20,7 +20,7 @@ if (!$coinzoneConfig["type"]) {
 $input = $_POST;
 $content = file_get_contents("php://input");
 
-$apiKey = $coinzoneConfig['apiKey'];
+$apiKey = html_entity_decode($coinzoneConfig['apiKey']);
 $stringToSign = $content . $currentUrl . $headers['timestamp'];
 $signature = hash_hmac('sha256', $stringToSign, $apiKey);
 if ($signature !== $headers['signature']) {
