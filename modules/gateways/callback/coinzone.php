@@ -25,7 +25,7 @@ $stringToSign = $content . $currentUrl . $headers['timestamp'];
 $signature = hash_hmac('sha256', $stringToSign, $apiKey);
 if ($signature !== $headers['signature']) {
     header("HTTP/1.0 400 Bad Request");
-    exit("Invalid callback" . $signature);
+    exit("Invalid callback");
 }
 
 $status = $input["status"];
