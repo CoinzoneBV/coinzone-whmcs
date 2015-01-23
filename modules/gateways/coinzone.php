@@ -10,7 +10,7 @@ function coinzone_config() {
         ),
         "FriendlyName" => array(
             "Type" => "System",
-            "Value"=>"Coinzone"
+            "Value"=>"Bitcoin - Powered by Coinzone"
         ),
         "clientCode" => array(
             "FriendlyName" => "Client Code",
