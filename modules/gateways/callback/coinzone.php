@@ -18,14 +18,17 @@ if (!$coinzoneConfig["type"]) {
 
 # Get Returned Variables - Adjust for Post Variable Names from your Gateway's Documentation
 $input = $_POST;
-$content = file_get_contents("php://input");
+foreach ($input as $key => $value) {
+    $input[$key] = htmlspecialchars_decode($value);
+}
+$content = http_build_query($input);
 
 $apiKey = html_entity_decode($coinzoneConfig['apiKey']);
 $stringToSign = $content . $currentUrl . $headers['timestamp'];
 $signature = hash_hmac('sha256', $stringToSign, $apiKey);
 if ($signature !== $headers['signature']) {
     header("HTTP/1.0 400 Bad Request");
-    exit("Invalid callback");
+    exit("Invalid callback ");
 }
 
 $status = $input["status"];
