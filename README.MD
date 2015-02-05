@@ -7,7 +7,7 @@
 #  System Requirements
 
   * [Merchant Account](https://merchant.coinzone.com/signup?source=whmcs)
-  * [Shopware](http://docs.whmcs.com/System_Requirements)
+  * [WHMCS](http://docs.whmcs.com/System_Requirements)
   * PHP 5.2+
   * Curl PHP Extension
   * JSON PHP Extension
