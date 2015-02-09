@@ -5,6 +5,10 @@ include("../../../includes/gatewayfunctions.php");
 include("../../../includes/invoicefunctions.php");
 
 $headers = getallheaders();
+$nHeaders = array();
+foreach ($headers as $key => $value) {
+    $nHeaders[strtolower($key)] = $value;
+}
 
 $schema = isset($_SERVER['HTTPS']) ? "https://" : "http://";
 $currentUrl = $schema . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
@@ -21,9 +25,9 @@ $content = file_get_contents("php://input");
 $input = json_decode($content, 1);
 
 $apiKey = html_entity_decode($coinzoneConfig['apiKey']);
-$stringToSign = $content . $currentUrl . $headers['timestamp'];
+$stringToSign = $content . $currentUrl . $nHeaders['timestamp'];
 $signature = hash_hmac('sha256', $stringToSign, $apiKey);
-if ($signature !== $headers['signature']) {
+if ($signature !== $nHeaders['signature']) {
     header("HTTP/1.0 400 Bad Request");
     exit("Invalid callback");
 }
