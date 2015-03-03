@@ -21,8 +21,18 @@ if (!$coinzoneConfig["type"]) {
 }
 
 # Get Returned Variables - Adjust for Post Variable Names from your Gateway's Documentation
-$content = file_get_contents("php://input");
-$input = json_decode($content, 1);
+if (!empty($_POST)) {
+    $input = $_POST;
+    $content = http_build_query($input);
+} else {
+    $content = file_get_contents("php://input");
+    $input = json_decode($content, 1);
+}
+
+if (empty($input)) {
+    header("HTTP/1.0 400 Bad Request");
+    exit("No content received");
+}
 
 $apiKey = html_entity_decode($coinzoneConfig['apiKey']);
 $stringToSign = $content . $currentUrl . $nHeaders['timestamp'];
@@ -36,7 +46,7 @@ $status = $input["status"];
 $invoiceid = $input["merchantReference"];
 $transid = $input["refNo"];
 $amount = $input["amount"];
-$fee = null;
+$fee = 0;
 
 $invoiceid = checkCbInvoiceID($invoiceid,$coinzoneConfig["name"]);
 checkCbTransID($transid); # Checks transaction number isn't already in the database and ends processing if it does
@@ -44,5 +54,8 @@ checkCbTransID($transid); # Checks transaction number isn't already in the datab
 if (in_array($status, array('PAID', 'COMPLETE'))) {
     # Successful
     addInvoicePayment($invoiceid,$transid,$amount,$fee,$gatewaymodule); # Apply Payment to Invoice: invoiceid, transactionid, amount paid, fees, modulename
-    logTransaction($coinzoneConfig["name"],$_POST,"Successful"); # Save to Gateway Log: name, data array, status
+    logTransaction($coinzoneConfig["name"],$input,"Successful"); # Save to Gateway Log: name, data array, status
+    exit('OK');
 }
+header("HTTP/1.0 400 Bad Request");
+exit("No Action");
