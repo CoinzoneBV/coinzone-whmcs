@@ -43,9 +43,29 @@ if ($signature !== $nHeaders['signature']) {
 }
 
 $status = $input["status"];
-$invoiceid = $input["merchantReference"];
+$invoiceid = (int)$input["merchantReference"];
+
+$invoiceSQL = mysql_query(
+    "
+          SELECT
+            tblinvoices.total, tblinvoices.status, tblcurrencies.code
+          FROM
+            tblinvoices, tblclients, tblcurrencies
+          WHERE
+            1
+            AND tblinvoices.userid = tblclients.id
+            AND tblclients.currency = tblcurrencies.id
+            AND tblinvoices.id = $invoiceid
+        "
+);
+
+$invoice = mysql_fetch_assoc($invoiceSQL);
+
+$input['amount'] = $invoice['total'];
+$input['currency'] = $invoice['code'];
+
 $transid = $input["refNo"];
-$amount = $input["amount"];
+$amount = $invoice['total'];
 $fee = 0;
 
 $invoiceid = checkCbInvoiceID($invoiceid,$coinzoneConfig["name"]);
